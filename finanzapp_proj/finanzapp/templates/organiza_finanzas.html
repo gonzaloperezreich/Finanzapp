@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<div style="margin-top: 20px;"></div>
+<div class="col-md-6 m-auto text-center">
+    <!-- <h1>Organiza tus categorías!</h1> -->
+
+    <div class="container-fluid bg-light py-5 rounded">
+    <h2>Estas son tus categorías:</h2>
+    <div style="margin-top: 20px;"></div>
+        <table class="col-md-6 m-auto text-center">
+            <thead>
+                <tr>
+                    <th scope="col" style="border-bottom: 1px solid black; ">Nombre</th>
+                    <th scope="col" style="border-bottom: 1px solid black; ">Presupuesto</th>
+                    <th scope="col" style="border-bottom: 1px solid black; "></th>
+                    <th scope="col" style="border-bottom: 1px solid black; "></th>
+                </tr>
+            </thead>
+            {% for category in categories %}
+            {% if category.name != "ninguna" %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>{{ category.budget|floatformat:0|intcomma }}</td>
+                <td><a class="btn btn-warning" href="/editCat/{{ category.id }}">Editar</a></td>
+                <td><a class="btn btn-danger" href="/eliminarCat/{{ category.id }}">Eliminar</a></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+    
+    <div style="margin-top: 20px;"></div>
+    <div class="container-fluid bg-light py-5 rounded">
+
+        <h2>Agrega una categoría:</h2>
+        <div style="margin-top: 20px;"></div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="name">Nombre:</label>
+                    <div class="another-custom-class">
+                        <input type="text" name="name" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label for="budget">Presupuesto:</label>
+                    <div class="another-custom-class">
+                        <input type="number" name="budget" required>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <button type="submit" class="btn bg-dark btn-lg px-3 text-light">Agregar</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 20px;"></div>
+    <div class="container-fluid bg-light py-5 rounded">
+
+        <h2>Edita tu presupuesto total:</h2>
+        <div style="margin-top: 20px;"></div>
+        <form method="post">
+            {% csrf_token %}
+            <!-- <div class="row"> -->
+                <div class="form-group">
+                    {% if global_budget %}
+                    <label for="budget">Cambia tu presupuesto:</label>
+                        <div class="another-custom-class">
+                                <input name="global_budget" value= "{{ global_budget|floatformat:0|intcomma }}" required>
+                        </div>
+                    {% else %}
+                    <label for="budget">No has definido tu presupuesto!:</label>
+                    <div class="another-custom-class">
+                        <input name="global_budget" type="number" value= "" required>
+                </div>
+                    {% endif %}
+                </div>
+            <!-- </div> -->
+            <div style="margin-top: 20px;"></div>
+            <button type="submit" class="btn bg-dark btn-lg px-3 text-light">Modificar</button>
+        </form>
+    </div>
+</div>
+
+<div style="margin-top: 20px;"></div>
+{% endblock %}
